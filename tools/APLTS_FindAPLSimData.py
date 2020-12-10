@@ -1,5 +1,3 @@
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
 import APLTS.ActivePlasmaLens as APL
 import numpy as np
 

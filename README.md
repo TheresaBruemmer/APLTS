@@ -1,7 +1,7 @@
 # APLTS
 Active-Plasma Lens + Thomson Scattering
 
-APLTS is my tool to calculate Thomson Scattering (TS) from a Gaussian laser with an electron bunch focused by an Active Plasma Lens (APL)
+APLTS is a tool to calculate Thomson Scattering (TS) from a Gaussian laser with an electron bunch focused by an Active Plasma Lens (APL)
 
 Author: Dr. Theresa Karoline Brümmer
 

@@ -15,6 +15,5 @@ myThomson=TS(myLaser,myBunch)
 #print(vars(myThomson))
 #print(vars(myThomson.laser))
 #print(vars(myThomson.bunch))
-print(myThomson.Photons_tot())
-print(myThomson.Photons_cone(0.5e-3))
-
+print("{:.2e}".format(myThomson.Photons_tot()))
+print("{:.2e}".format(myThomson.Photons_cone(0.5e-3)))

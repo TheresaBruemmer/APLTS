@@ -1,29 +1,31 @@
+import sys
+sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
 import APLTS.ActivePlasmaLens as APL
 import numpy as np
 
 '''
 Input on calling this function
 '''
-gammae=float(sys.argv[1])
-sigmar_f=float(sys.argv[2])
+gammae=float(sys.argv[1]) # electron (central) energy
+sigmar_f=float(sys.argv[2]) # required electron focal waist (m)
 
 '''
 Output:
-I_0
-z_F
+I_0   # required APL current (A)
+z_F   # resulting focal plane (m)
 '''
 
 
 '''
 Some hard coded APL data
 '''
-L_APL=0.1
-z_0=5.0e-2
-r_APL=2.0e-3
-eps_n=1.0e-6
-sigmar_i=1.0e-6
-I0_min=100.0
-I0_max=1500.0
+L_APL=0.1        # APL length (m)
+z_0=5.0e-2       # APL position, i.e. beginning of APL field
+r_APL=2.0e-3     # APL radius
+eps_n=1.0e-6     # electron bunch normalised emittance (m x rad) 
+sigmar_i=1.0e-6  # initialelectron bunch waist at z=0 (in focus after plasma acceleration)
+I0_min=100.0     # minimum of the APL current range
+I0_max=1500.0    # maximum of the APL current range
 
 
 '''

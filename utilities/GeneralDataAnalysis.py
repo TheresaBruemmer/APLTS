@@ -25,9 +25,9 @@ def find_FWHM(x_arr,data_arr,plot=True,out=True):
     #print("E_{peak}="+str(E_Imax)+'keV')                                                            
     #Find FWHM                                                                                       
     #I=0.5Imax below E(Imax)                                                                         
-    lower_cone=np.argmin(abs(data_arr[0:E_Imax_index]-Imax/2))
+    lower_cone=np.nanargmin(abs(data_arr[0:E_Imax_index]-Imax/2))
     #above                                                                                           
-    upper_cone=np.argmin(abs(data_arr[E_Imax_index:]-Imax/2))+E_Imax_index
+    upper_cone=np.nanargmin(abs(data_arr[E_Imax_index:]-Imax/2))+E_Imax_index
     FWHM=x_arr[upper_cone]-x_arr[lower_cone]
     FWHM_perc=FWHM/E_Imax
     if out==True:
@@ -241,3 +241,8 @@ def odd(x_):
     return x - 1 if x % 2 == 0 else x
 #print("FWHM="+str(FWHM_simple_cone*100)+" %")
     return E_Imax,FWHM_simple_cone
+
+
+
+def rms(x):
+    return np.sqrt(np.sum(x**2)/len(x))

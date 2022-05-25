@@ -2,7 +2,7 @@
 This module contains Gaussian laser tools including a laser class
 """
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+sys.path.append("/home/bruemt/code/APLTS/utilities/")
 import physical_constants as constants
 import numpy as np
 from numpy import sqrt,cos,sin,tan,exp, pi, log

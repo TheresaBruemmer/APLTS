@@ -23,8 +23,6 @@ import physical_constants as constants
 import APLTS.ActivePlasmaLens as APL
 import GeneralDataAnalysis as GDA
 from FittingFunctions import Lorentzian_amp as Lorentzian
-#comment:
-#I am not a fan of the ThomsonClass. It should either be changed to a module or be based on a Laser class, so that not both have to be defined everytime
 
 
 def N_collimated(APL_instance,TS_instance,collimation_angle):
@@ -85,7 +83,7 @@ def effective_energyspread_fromdata(gammas,Ngammas):
     gammae: electron energy with most contribution to the spectrum, i.e. peak position of fitted Lorentzian
     popt: fit parameters of the Lorentzian fit to the data
     """
-    target_gammae = weighted_avg_and_std(gammas,Ngammas,True)
+    target_gammae = GDA.weighted_avg_and_std(gammas,Ngammas,True)
     popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,1])
     gamma_arr = np.linspace(np.nanmin(gammas),np.nanmax(gammas),1000)
     Ngamma_arr = Lorentzian(gamma_arr,*popt)

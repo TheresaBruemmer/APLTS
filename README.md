@@ -14,7 +14,7 @@ Calculation:
 - APL focusing: 
   - Plan APL parameters for optimised TS interaction (e.g. as input for simulation)
   - Calculate APL paramaters and electron-bunch focusing
-- APL+TS: Determine chromatic focussing effect on TS output (based on Brümmer et al., PRAB 2020, and Brümmer et al., to be submitted 2021)
+- APL+TS: Determine chromatic focussing effect on TS output (based on Brümmer et al., PRAB 2020, and Brümmer et al., to be submitted 2022)
 
 
 Requirements: 

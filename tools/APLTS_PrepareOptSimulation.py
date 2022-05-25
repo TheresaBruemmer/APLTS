@@ -36,6 +36,7 @@ simulate sig_Ekin = 0.09746637968754784 eV
 import sys
 sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
 from physical_constants import *
+import Astra_tools
 import APLTS.ActivePlasmaLens as APL
 from APLTS import APLTS,Laser,ThomsonScattering
 from APLTS import ThomsonScatteringTools as TST
@@ -58,9 +59,9 @@ Laser and Electron Bunch Parameters
 a0=0.9
 Ep=0.2
 llambda=1030.e-9
-taumin_fix=0#1e-12 
+taumin_fix=1e-18#should be >0, better: realistic value, tau=0 will throw runtime erro 
 taumin=1.0e-12
-taumax=15.e-12
+taumax=1.0e-12
 #
 eps_n=1.0e-6
 sigmar_i=1.0e-6
@@ -98,7 +99,7 @@ gamma_e=sqrt(Etarget/4/EL*(1+a0**2/2))
 
 
 besttau,bestw0,bestsigmar,bestNgamma=TST.Optimise(sigmamin,sigmamax,taumin,taumax,llambda,Ep,a0,gamma_e,Q,eps_n,sigma_el,theta_c,printall,taumin_fix,N_run=3)
-I0,zF,check_Waist = APL.FindAPLConfig(gamma_e,sigmar_i,eps_n,bestsigmar,L_APL,r_APL,z_0,I0_min,I0_max,N_run)
+I0,zF,check_Waist = APL.FindAPLConfig(gamma_e,sigmar_i,eps_n,bestsigmar,L_APL,r_APL,z_0,I0_min,I0_max,Nrun)
 zstart=Astra_tools.Laser_zstart(gamma_e,zF)
 APL_instance=APL.APL_setup(L=L_APL,I_0=I0,z_0=z_0,r_0=r_APL,gammae=gamma_e,eps_n=eps_n,sigmar_i=sigmar_i)
 Laser_instance=Laser.Laser(_wavelength=llambda,_Ep=Ep,_a0=a0,_tau_FWHM=besttau)

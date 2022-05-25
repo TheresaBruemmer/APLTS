@@ -1,13 +1,16 @@
 """
 ------------------------------------------------------------------------------------------------------------
---- Photon number emission for electron energies deviating from the target energy spread (focused by APL) ---
+--- Photon number (dN) emission for different electron energies (dgamma) (focused by APL) ---
 Rykovanov, S. G., Geddes, C. G. R., Vay, J.-L., Schroeder, C. B., Esarey, E., & Leemans, W. P. (2014). Quasi-monoenergetic femtosecond photon sources from Thomson Scattering using laser plasma accelerators and plasma channels. Journal of Physics B: Atomic, Molecular and Optical Physics, 47(23), 234013. https://doi.org/10.1088/0953-4075/47/23/234013
 ------------------------------------------------------------------------------------------------------------
 This script calculates (and plots) the number of emitted photons from the Thomson interaction of an APL-focused bunch with a head-on propagating Gaussian laser.
-Since the APLTS package does not include energy spread bunch propagation/interaction, the influece of this is approached by determining the effect of different gammas in the setup:
-The APL focuses the target gammae, the interaction with the TS laser is matched to this focus position. Then, gamma_e is varied and the TS photons calculated. 
+Since the APLTS package does not include energy spread bunch propagation/interaction, the influece of this is approached by determining the propagation and TS photon emission of electrons of different energies gamma_e in the APLTS setup:
+The APL focuses the target gamma_e (required for a specified Thomson photon energy), the interaction with the TS laser is matched to this focus position. Then, gamma_e is varied and the TS photons calculated via Rykovanov et al. JPB 2014. 
 ------------------------------------------------------------------------------------------------------------
 Requires APLTS package and associated python packages
+
+This script's result can be compared to the results dN/dgamma_e from the single-trace clara2 evaluation. 
+
 
 To do: Make this script an operation in APLTS.py e.g. Calc_dNdgammae or similar
 """

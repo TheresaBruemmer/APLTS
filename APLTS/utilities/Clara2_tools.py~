@@ -1,10 +1,10 @@
 """
 This module contains python modules for clara2 postprocessinf
 """
-import sys
-sys.path.append("/home/bruemt/ICS/tools/ModulesAndClasses/")
-import GeneralDataAnalysis as GDA
-from physical_constants import *
+#import sys
+#sys.path.append("/home/bruemt/ICS/tools/ModulesAndClasses/")
+import utilities.GeneralDataAnalysis as GDA
+from utilities.physical_constants import *
 import numpy as np
 import matplotlib as mpl
 mpl.use("pdf")

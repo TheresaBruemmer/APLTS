@@ -14,8 +14,8 @@ w0=3.384e-06 m
 sigmar=2.106e-06 m
 """
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
-from physical_constants import *
+sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
+from APLTS.utilities.physical_constants import *
 import APLTS.ActivePlasmaLens as APL
 from APLTS import APLTS,Laser,ThomsonScattering
 from APLTS import ThomsonScatteringTools as TST

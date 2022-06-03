@@ -1,5 +1,9 @@
+"""
+This script returns active plasma lens parameters for target electron energy and focal size
+"""
+
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 import APLTS.ActivePlasmaLens as APL
 import numpy as np
 

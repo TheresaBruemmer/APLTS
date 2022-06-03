@@ -1,9 +1,9 @@
 """
 This Module collects all Astra python methods
 """
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
-import GeneralDataAnalysis as GDA
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS")
+import APLTS.utilities.GeneralDataAnalysis as GDA
 import numpy as np
 import math
 import os

@@ -1,10 +1,10 @@
 """
 This module contains Thomson Scattering class, loading laser and ebunch
 """
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 from APLTS import ThomsonScatteringTools as TST
-import physical_constants as constants
+import APLTS.utilities.physical_constants as constants
 import numpy as np
 from numpy import sqrt,cos,sin,tan,exp, pi, log
 from mpmath import mp

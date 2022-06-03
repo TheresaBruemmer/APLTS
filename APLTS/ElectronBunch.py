@@ -1,9 +1,9 @@
 """
 This module contains the electron bunch
 """
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
-import physical_constants as constants
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
+import APLTS.utilities.physical_constants as constants
 
 class ElectronBunch():
     """

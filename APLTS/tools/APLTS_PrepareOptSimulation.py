@@ -34,9 +34,9 @@ simulate sig_Ekin = 0.09746637968754784 eV
 
 """
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
-from physical_constants import *
-import Astra_tools
+sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
+from APLTS.utilities.physical_constants import *
+import APLTS.utilities.Astra_tools
 import APLTS.ActivePlasmaLens as APL
 from APLTS import APLTS,Laser,ThomsonScattering
 from APLTS import ThomsonScatteringTools as TST

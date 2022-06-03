@@ -2,13 +2,13 @@
 This module defines the Active plasma lens focusing setup which allows to calculate the bunch parameters as it propagates through the setup
 Required matrix formalism functions are defined. 
 """
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 
 from APLTS import ElectronBunch
 import numpy as np
 from numpy import sqrt,pi
-import physical_constants as const
+import APLTS.utilities.physical_constants as const
 mu_0=const.mu0
 e=const.e_charge
 m_0=const.m_e

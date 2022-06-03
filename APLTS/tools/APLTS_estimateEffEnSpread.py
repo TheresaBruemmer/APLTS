@@ -3,7 +3,7 @@ Calculates the effective energy spread in an APLTS setup. Based on Brümmer et a
 """
 
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 from APLTS import APLTS,Laser
 import APLTS.ActivePlasmaLens as APL
 

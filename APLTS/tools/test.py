@@ -2,7 +2,7 @@
 ThomsonScattering class tester
 """
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 from APLTS.Laser import Laser
 from APLTS.ElectronBunch import ElectronBunch as ebunch
 from APLTS.ThomsonScattering import ThomsonScattering as TS

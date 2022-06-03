@@ -16,10 +16,10 @@ To do: Make this script an operation in APLTS.py e.g. Calc_dNdgammae or similar
 """
 #My modules
 import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 from APLTS import Laser,ActivePlasmaLens,ThomsonScattering,APLTS
-import physical_constants as constants
-from GeneralDataAnalysis import _nanargmin #in GDA, mpl and plt are already loaded
+import utilities.physical_constants as constants
+from utilities.GeneralDataAnalysis import _nanargmin #in GDA, mpl and plt are already loaded
 #
 import numpy as np
 from numpy import sqrt,cos,sin,tan,exp, pi, log

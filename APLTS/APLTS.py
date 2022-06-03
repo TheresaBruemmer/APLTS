@@ -5,8 +5,8 @@ Active-Plasma Lens + Thomson Scattering (APLTS)
 This module contains the functions for Thomson Scattering of a Gaussian laser with an APL-focused, thus chromatically focused, electron bunch 
 Reference: Brümmer et al. "Compact all-optical tunable narrowband Compton hard X-ray source", to be published
 """
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 
 
 import numpy as np
@@ -19,10 +19,10 @@ from scipy.optimize import curve_fit
 import math
 #
 from APLTS import Laser,ThomsonScattering
-import physical_constants as constants
+import APLTS.utilities.physical_constants as constants
 import APLTS.ActivePlasmaLens as APL
-import GeneralDataAnalysis as GDA
-from FittingFunctions import Lorentzian_amp as Lorentzian
+import APLTS.utilities.GeneralDataAnalysis as GDA
+from APLTS.utilities.FittingFunctions import Lorentzian_amp as Lorentzian
 
 
 def N_collimated(APL_instance,TS_instance,collimation_angle):

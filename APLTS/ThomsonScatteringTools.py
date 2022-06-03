@@ -6,15 +6,15 @@ Villa, F., Luccio, A., & Zolotorev, M. (1996). A source of kilovolt X-ray. Micro
 Rykovanov, S. G., Geddes, C. G. R., Vay, J.-L., Schroeder, C. B., Esarey, E., & Leemans, W. P. (2014). Quasi-monoenergetic femtosecond photon sources from Thomson Scattering using laser plasma accelerators and plasma channels. Journal of Physics B: Atomic, Molecular and Optical Physics, 47(23), 234013. https://doi.org/10.1088/0953-4075/47/23/234013
 
 """
-import sys
-sys.path.append("/beegfs/desy/group/fla/ICS/tools/ModulesAndClasses/")
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
 from APLTS import Laser
 import numpy as np
 from numpy import sqrt,cos,sin,tan,exp, pi, log
 import mpmath as mp
 import math
 import scipy
-import physical_constants as constants
+import APLTS.utilities.physical_constants as constants
 from joblib import Parallel, delayed
 import multiprocessing
 #

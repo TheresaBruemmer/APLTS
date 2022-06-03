@@ -1,9 +1,9 @@
 """
 This module contains Gaussian laser tools including a laser class
 """
-import sys
-sys.path.append("/home/bruemt/code/APLTS/utilities/")
-import physical_constants as constants
+#import sys
+#sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/utilities/")
+import APLTS.utilities.physical_constants as constants
 import numpy as np
 from numpy import sqrt,cos,sin,tan,exp, pi, log
 

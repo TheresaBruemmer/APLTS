@@ -12,8 +12,8 @@ General Data Analysis Tools: Functions and factors
 def test():
     print("It works")
 RMStoFWHM = 2.*np.sqrt(2.*np.log(2.))
-def find_FWHM(x_arr,data_arr,plot=True,out=True):
-    if plot==True:
+def find_FWHM(x_arr,data_arr,plot=False,out=True):
+    if plot:
         plt.plot(x_arr,data_arr,'.')
     Imax=np.nanmax(data_arr)
     #at energy index                                                                       
@@ -30,11 +30,11 @@ def find_FWHM(x_arr,data_arr,plot=True,out=True):
     upper_cone=np.nanargmin(abs(data_arr[E_Imax_index:]-Imax/2))+E_Imax_index
     FWHM=x_arr[upper_cone]-x_arr[lower_cone]
     FWHM_perc=FWHM/E_Imax
-    if out==True:
+    if out:
         print("FWHM="+str(FWHM_perc*100)+" %")                                                   
     return E_Imax,FWHM,FWHM_perc
-def find_FWHM_0center(x_arr,data_arr,plot=True,out=True):
-    if plot==True:
+def find_FWHM_0center(x_arr,data_arr,plot=False,out=True):
+    if plot:
         plt.plot(x_arr,data_arr,'.')
     Imax=np.nanmax(data_arr)
     #at energy index                                                                                 
@@ -48,7 +48,7 @@ def find_FWHM_0center(x_arr,data_arr,plot=True,out=True):
     #above                                                                                           
     upper_cone=np.argmin(abs(data_arr[E_Imax_index:]-Imax/2))+E_Imax_index
     FWHM_simple_cone=x_arr[upper_cone]-x_arr[lower_cone]
-    if out==True:
+    if out:
         print("center="+str(E_Imax))
         print("low=" +str(x_arr[lower_cone]))
 
@@ -58,8 +58,8 @@ def find_FWHM_0center(x_arr,data_arr,plot=True,out=True):
     return E_Imax,FWHM_simple_cone
 from scipy.signal import savgol_filter
 #savgol_filter(x, window_length, polyorder, deriv=0, delta=1.0, axis=-1, mode='interp', cval=0.0)
-def find_FWHM_savgol(x_arr,data_arr,plotData=True):
-    if plotData==True:
+def find_FWHM_savgol(x_arr,data_arr,plotData=False):
+    if plotData:
         dataplot=plt.plot(x_arr,data_arr,'.')
         y_arr = savgol_filter(data_arr, 5, 2)#, deriv=0, delta=1.0, axis=-1, mode='interp', cval=0.0)
         color=dataplot[0].get_color()
@@ -101,7 +101,7 @@ def find_FWHM_savgol_0center(x_arr,data_arr,plotData=False,poly_order=4):
     right_v_f = _lin_interp(new_x,y_arr, right_i, 0.5*ymax)
     return new_x[np.nanargmax(y_arr)],abs(left_v_f - right_v_f)
 
-def find_FWHM_savgol_0center_old(x_arr,data_arr,plotData=True):
+def find_FWHM_savgol_0center_old(x_arr,data_arr,plotData=False):
     if plotData==True:
         dataplot=plt.plot(x_arr,data_arr,'.')
         y_arr = savgol_filter(data_arr, 5, 2)#, deriv=0, delta=1.0, axis=-1, mode='interp', cval=0.0)
@@ -207,7 +207,7 @@ def binData(x,y,plotData=False):
         plt.show()
     x=(_[1:] + _[:-1])/2
     mean[np.where(np.isnan(mean))]=0
-    return x, mean
+    return mean,std,_
 
 
 def binData_old(gamma,Ngamma,num):

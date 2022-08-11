@@ -34,13 +34,7 @@ def generatorEkin_gammarange(gammamin,gammamax):
     return E_kin,signeg,sigpos,gammamean
 
 def generatorEkin(gammae,enspread):
-    """
-    input for generator file. 
-    input:
-    gammae: electron Lorentz factor
-    enspread: electron relative energy spread
-    returns Ekin and sig_Ekin for uniform energy dist. for a given energy FWHM spread around gamma
-    """
+    #input for generator file. returns Ekin and sig_Ekin for uniform energy dist. for a given energy FWHM spread around gamma
     E_kin=Ekin(gammae)
     gammamin = gammae*(1-2*enspread)
     gammamax = gammae*(1+2*enspread)
@@ -250,3 +244,44 @@ def make_Trajectories(path,filename):
                 fout.write("\n")
             fout.close()
         os.rename(newfilename,changefilename)
+
+
+def read_generator_info(gen_file,return_originaldata=False):
+    #Is there a routine reading generator file info?
+    #E_kin = 43.999
+    #sig_E_kin=0.069
+    #gamma=E_kin/0.511+1
+    #dE_kin = sig_E_kin*2.*np.sqrt(3.) #width of the uniform electron spectrum
+    #Q_bunch=dE_kin*1e-12 # 1pC per MeV
+    #print("Q1 = "+str(Q_bunch))
+    #N_sim=5000
+    gendict={}
+    datafile=open(gen_file,'r')
+    data=datafile.readlines()
+    datafile.close()
+    for line in data:
+        splitline = line.split()
+        for elem in splitline:
+            datas=elem.split("=")
+            if len(datas)>1:
+                if datas[0]!="":
+                    gendict[datas[0]]=datas[1]
+    #gendata dictionary looks like this:
+    #{'Add': 'FALSE,', 'N_add': '0,', 'IPart': '5000,', 'Species': "'electrons'", 'Probe': 'True,', 'All_Probe': 'T,', 'Noise_reduc': 'F,', 'Cathode': 'F', 'Q_total': '0.02', 'Ref_zpos': '0.e-6,', 'Ref_Ekin': '37.133', 'Dist_z': "'gauss',", 'sig_z': '1.5e-3,', 'C_sig_z': '3.', 'Dist_pz': "'u',", 'sig_Ekin': '0.07E3,', 'cor_Ekin': '0.0E0,', 'C_sig_Ekin': '3.', 'Dist_x': "'gauss',", 'sig_x': '1.00e-3,', 'C_sig_x': '3.', 'Dist_px': "'g',", 'Nemit_x': '1.0,', 'cor_px': '0.0E0,', 'C_sig_px': '3.', 'Dist_y': "'gauss',", 'sig_y': '1.00e-3,', 'C_sig_y': '3.', 'Dist_py': "'g',", 'Nemit_y': '1.0,', 'cor_py': '0.0E0,', 'C_sig_py': '3.'}
+    #write a nicer dict in SI units:
+    #symmetrical bunch is assumed, i.e. x and y data assumed to be same
+    bunch_data={}
+    bunch_data[E_kin]=float(gendict['Ref_Ekin'])*1e6 #MeV to eV
+    bunch_data[sig_E_kin]=float(gendict['sig_Ekin'])*1e3 #keV to eV
+    bunch_data[gamma]=bunch_data[E_kin]/0.511e6+1
+    bunch_data[dE_kin]=bunch_data[sig_E_kin]*2.*np.sqrt(3.) #width of the uniform electron spectrum
+    bunch_data[Q_bunch]=float(gendict['Q_total'])*1e-9 #nC to C
+    bunch_data[N_sim]=int(gendict['IPart'])
+    bunch_data[eps_n]=float(gendict['Nemit_x'])*1e-6 #mmmrad to m rad
+    bunch_data[sigma_r]=float(gendict['sig_x'])*1e-3 #mm to m
+    bunch_data[sigma_z]=float(gendict['sig_z'])*1e-3 #mm to m
+    bunch_data[energydist]=gendict(['Dist_pz']) #gaussian or uniform?
+    if return_originaldata==False:
+        return bunch_data
+    else:
+        return bunch_data, gendict

@@ -34,7 +34,13 @@ def generatorEkin_gammarange(gammamin,gammamax):
     return E_kin,signeg,sigpos,gammamean
 
 def generatorEkin(gammae,enspread):
-    #input for generator file. returns Ekin and sig_Ekin for uniform energy dist. for a given energy FWHM spread around gamma
+    """
+    input for generator file. 
+    input:
+    gammae: electron Lorentz factor
+    enspread: electron relative energy spread
+    returns Ekin and sig_Ekin for uniform energy dist. for a given energy FWHM spread around gamma
+    """
     E_kin=Ekin(gammae)
     gammamin = gammae*(1-2*enspread)
     gammamax = gammae*(1+2*enspread)

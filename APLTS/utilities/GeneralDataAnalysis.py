@@ -131,19 +131,7 @@ def _nanargmin(arr):
        return np.nan
 def normalize(x):
     return x/np.nanmax(x)
-def weighted_avg_and_std(values, weights, return_average=False):
-    """
-    Return the weighted average and standard deviation.
 
-    values, weights -- Numpy ndarrays with the same shape.
-    """
-    average = np.average(values, weights=weights)
-    # Fast and numerically precise:
-    variance = np.average((values-average)**2, weights=weights)
-    if return_average==True:
-        return average
-    else:
-        return math.sqrt(variance)#(average, math.sqrt(variance))
 def std_rms(values,printing=False):
     n = len(values)
     mean=np.sum(values)/n
@@ -156,6 +144,7 @@ def std_rms_weighted(values, weight):
     n=len(values)
     dev = (np.array([values[i] for i in range(0,n)])-mean)**2
     return np.sqrt(np.sum(dev)/n)
+
 def weighted_avg_and_std(values, weights, return_average=False):
     """
     Return the weighted average and standard deviation.
@@ -169,6 +158,7 @@ def weighted_avg_and_std(values, weights, return_average=False):
         return average
     else:
         return math.sqrt(variance)#(average, math.sqrt(variance))
+
 def avg_and_std(values, return_average=False):
     """
     Return the weighted average and standard deviation.

@@ -7,7 +7,19 @@ import APLTS.utilities.physical_constants as constants
 import numpy as np
 from numpy import sqrt,cos,sin,tan,exp, pi, log
 
-
+def Ep_calc(wavelength, a0, w0, tau_fwhm):
+    """
+    Calculates laser pulse energy for a Gaussian laser
+    input:
+    wavelength: laser wavelength (m), float
+    a0: peak amplitude, i.e. laser strength parameter (dimensionless), float
+    w0: laser focal waist (m), float
+    tau_fwhm: laser pulse duration (s, FWHM), float
+    output:
+    Ep: laser pulse energy (J), float
+    """
+    tau=tau_fwhm/(sqrt(2.*np.log(2)))
+    return (constants.e_charge/(2*pi*constants.m_e*constants.c_light**2))**2*1/(sqrt(pi/2)*pi/4*constants.eps_0*constants.c_light)*wavelength**2*tau/w0**2/a0**2
 def a0_calc(wavelength,Ep,w0,tau_fwhm):
     """
     Calculates peak laser strength parameter for a Gaussian laser

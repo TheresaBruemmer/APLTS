@@ -11,7 +11,7 @@ Reference: Brümmer et al. "Compact all-optical tunable narrowband Compton hard 
 
 import numpy as np
 from numpy import sqrt
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 #from matplotlib.colors import LogNorm
 #import scipy
 #from scipy import special
@@ -69,7 +69,7 @@ def N_collimated_gammae_var(APL_instance,TS_instance,collimation_angle,gammae):
     N_cone = float(TS_instance.Photons_cone(collimation_angle))
     return TS_instance.bunch._sigma_r,TS_instance.bunch._sigma_div,N_cone
 
-def effective_energyspread_fromdata(gammas,Ngammas):
+def effective_energyspread_fromdata(gammas,Ngammas,save_plot=None):
     """
     returns effective energy spread from single-trace data
     fits Lorentzian function to data
@@ -84,15 +84,30 @@ def effective_energyspread_fromdata(gammas,Ngammas):
     popt: fit parameters of the Lorentzian fit to the data
     """
     target_gammae = GDA.weighted_avg_and_std(gammas,Ngammas,True)
-    popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,1])
     gamma_arr = np.linspace(np.nanmin(gammas),np.nanmax(gammas),1000)
-    Ngamma_arr = Lorentzian(gamma_arr,*popt)
-    peak,realwidth,width=GDA.find_FWHM(gamma_arr,Ngamma_arr,False,False)
-    effective_energy_spread_FWHM = 2*abs(popt[1])/popt[0]
-    gammae = peak
-    if abs(gammae-target_gammae)/target_gammae>0.05:
-        print("fit peak ("+str("%.2f" %gammae)+") differs from weighted mean ("+str("%.2f" %target_gammae)+")")
-    return effective_energy_spread_FWHM,gammae,popt
+    Ngamma_arr = np.zeros_like(gamma_arr)
+    try:
+        popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,1])
+        Ngamma_arr = Lorentzian(gamma_arr,*popt)
+        effective_energy_spread_FWHM = 2*abs(popt[1])/popt[0]
+    except:
+        print("Lorentzian fit not possible, try find_FWHM")
+        effective_energy_spread_FWHM = np.NAN
+	popt=np.nan
+    if save_plot is not None:
+        plt.plot(gammas,Ngammas,".")
+        plt.plot(gamma_arr,Ngamma_arr)
+        plt.savefig(save_plot)
+    try:
+        peak,realwidth,width=GDA.find_FWHM(gamma_arr,Ngamma_arr)
+        gammae = peak
+        if effective_energy_spread_FWHM==np.NAN:
+            effective_energy_spread_FWHM=width
+        if abs(gammae-target_gammae)/target_gammae>0.05:
+            print("fit peak ("+str("%.2f" %gammae)+") differs from weighted mean ("+str("%.2f" %target_gammae)+")")
+    except:
+        print("could not determine FWHM")
+    return effective_energy_spread_FWHM,gamma_arr,popt
 def N_eff_simple(sigma_e,w0):
     """
     returns photon production factor given solely by the waist relation in the Thomson interaction of a bunch with a Gaussian laser
@@ -148,7 +163,7 @@ def effective_energyspread(zF,Laser_instance,APL_instance):
     sigma_at_target_foc_new_instance=sqrt(beta_at_target_foc_new_instance*APL_instance_zF.eps_n/gammae)
     Neff= N_eff(sigma_at_target_foc_new_instance,Laser_instance._w0,Laser_instance._a0,1)
     #guess
-    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,False,False)
+    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,None,False)
     #fit
     popt,pcov = curve_fit(Lorentzian,gammae_instance_arr,Neff,p0=[peak,width,np.nanmax(Neff)])
     effective_energy_spread_FWHM = abs(2*popt[1]/popt[0]) # attention: not %
@@ -178,7 +193,7 @@ def effective_energyspread_fixedsetup(Laser_instance,APL_instance):
     sigma_at_target_foc_new_instance=sqrt(beta_at_target_foc_new_instance*APL_instance_zF.eps_n/gammae)
     Neff= N_eff(sigma_at_target_foc_new_instance,Laser_instance._w0,Laser_instance._a0,1)
     #guess
-    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,False,False)
+    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,None,False)
     #fit
     popt,pcov = curve_fit(Lorentzian,gammae_instance_arr,Neff,p0=[peak,width,np.nanmax(Neff)])
     effective_energy_spread_FWHM = abs(2*popt[1]/popt[0])

@@ -12,9 +12,14 @@ General Data Analysis Tools: Functions and factors
 def test():
     print("It works")
 RMStoFWHM = 2.*np.sqrt(2.*np.log(2.))
-def find_FWHM(x_arr,data_arr,plot=False,out=True):
-    if plot:
+def find_FWHM(x_arr,data_arr,save_plot=None,out=False):
+    """
+    save_plot: None or str, path to save plot
+    """
+    if save_plot is not None:
         plt.plot(x_arr,data_arr,'.')
+        plt.savefig(save_plot)
+        plt.clf()
     Imax=np.nanmax(data_arr)
     #at energy index                                                                       
     #print(data_arr)          
@@ -31,7 +36,7 @@ def find_FWHM(x_arr,data_arr,plot=False,out=True):
     FWHM=x_arr[upper_cone]-x_arr[lower_cone]
     FWHM_perc=FWHM/E_Imax
     if out:
-        print("FWHM="+str(FWHM_perc*100)+" %")                                                   
+        print("find FWHM="+str(FWHM_perc*100)+" %")                                                   
     return E_Imax,FWHM,FWHM_perc
 def find_FWHM_0center(x_arr,data_arr,plot=False,out=True):
     if plot:

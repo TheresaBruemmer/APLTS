@@ -39,7 +39,7 @@ def Twiss(epsilon_n,gammae,sigmar):
     alpha, beta, gamma: Counrant-Snyder parameters, array of floats
     """
     epsilon=epsilon_n/gammae
-    alpha=0  # is zero in focus
+    alpha=np.zeros_like(gammae)  # is zero in focus
     beta=sigmar**2/epsilon
     gammaT=(1+alpha**2)/beta
     return np.array([beta,alpha,gammaT])

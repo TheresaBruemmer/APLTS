@@ -14,7 +14,7 @@ w0=3.384e-06 m
 sigmar=2.106e-06 m
 """
 import sys
-sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
+sys.path.append("/home/bruemt/code/APLTS/")
 from APLTS.utilities.physical_constants import *
 import APLTS.ActivePlasmaLens as APL
 from APLTS import APLTS,Laser,ThomsonScattering

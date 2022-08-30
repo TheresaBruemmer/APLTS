@@ -93,7 +93,7 @@ def effective_energyspread_fromdata(gammas,Ngammas,save_plot=None):
     except:
         print("Lorentzian fit not possible, try find_FWHM")
         effective_energy_spread_FWHM = np.NAN
-	popt=np.NAN
+        popt=np.NAN
     if save_plot is not None:
         plt.plot(gammas,Ngammas,".")
         plt.plot(gamma_arr,Ngamma_arr)

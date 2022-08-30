@@ -39,7 +39,7 @@ def Twiss(epsilon_n,gammae,sigmar):
     alpha, beta, gamma: Counrant-Snyder parameters, array of floats
     """
     epsilon=epsilon_n/gammae
-    alpha=0  # is zero in focus
+    alpha=np.zeros_like(gammae)  # is zero in focus
     beta=sigmar**2/epsilon
     gammaT=(1+alpha**2)/beta
     return np.array([beta,alpha,gammaT])
@@ -145,6 +145,9 @@ def FindAPLConfig_fixed_focalplane(gammae,sigmar_i,eps_n,zF,L_APL,r_APL,z_0,I0_m
         I0_min=I0-2*delta_I0
         I0_max=I0+2*delta_I0
     return I0,sigmar_f,check_Focus
+
+
+
 ############################################################################
 
 #class APL:

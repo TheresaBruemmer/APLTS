@@ -36,7 +36,7 @@ simulate sig_Ekin = 0.09746637968754784 eV
 import sys
 sys.path.append("/home/bruemt/code/APLTS/")
 from APLTS.utilities.physical_constants import *
-import APLTS.utilities.Astra_tools
+from APLTS.utilities import Astra_tools
 import APLTS.ActivePlasmaLens as APL
 from APLTS import APLTS,Laser,ThomsonScattering
 from APLTS import ThomsonScatteringTools as TST
@@ -98,8 +98,8 @@ Nl=Ep/(h*c_light/llambda)
 gamma_e=sqrt(Etarget/4/EL*(1+a0**2/2))
 
 
-besttau,bestw0,bestsigmar,bestNgamma=TST.Optimise(sigmamin,sigmamax,taumin,taumax,llambda,Ep,a0,gamma_e,Q,eps_n,sigma_el,theta_c,printall,taumin_fix,N_run=3)
-I0,zF,check_Waist = APL.FindAPLConfig(gamma_e,sigmar_i,eps_n,bestsigmar,L_APL,r_APL,z_0,I0_min,I0_max,Nrun)
+besttau,bestw0,bestsigmar,bestNgamma=TST.Optimise(sigmamin,sigmamax,taumin,taumax,llambda,Ep,a0,gamma_e,Q,eps_n,sigma_el,theta_c,printall,taumin_fix,BWlim,N_run=3)
+I0,zF,check_Waist = APL.FindAPLConfig_fixed_focalwaist(gamma_e,sigmar_i,eps_n,bestsigmar,L_APL,r_APL,z_0,I0_min,I0_max,Nrun)
 zstart=Astra_tools.Laser_zstart(gamma_e,zF)
 APL_instance=APL.APL_setup(L=L_APL,I_0=I0,z_0=z_0,r_0=r_APL,gammae=gamma_e,eps_n=eps_n,sigmar_i=sigmar_i)
 Laser_instance=Laser.Laser(_wavelength=llambda,_Ep=Ep,_a0=a0,_tau_FWHM=besttau)

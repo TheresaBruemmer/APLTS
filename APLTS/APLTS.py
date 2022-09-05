@@ -87,17 +87,20 @@ def effective_energyspread_fromdata(gammas,Ngammas,save_plot=None):
     gamma_arr = np.linspace(np.nanmin(gammas),np.nanmax(gammas),1000)
     Ngamma_arr = np.zeros_like(gamma_arr)
     try:
-        popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,1])
+        popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,np.nanmax(Ngammas)])
         Ngamma_arr = Lorentzian(gamma_arr,*popt)
         effective_energy_spread_FWHM = 2*abs(popt[1])/popt[0]
     except:
         print("Lorentzian fit not possible, try find_FWHM")
         effective_energy_spread_FWHM = np.NAN
-	popt=np.NAN
+        popt = np.NAN
     if save_plot is not None:
         plt.plot(gammas,Ngammas,".")
         plt.plot(gamma_arr,Ngamma_arr)
-        plt.savefig(save_plot)
+        plt.xlabel("gamma")
+        plt.ylabel("Ngamma")
+        plt.savefig(save_plot,bbox_inches='tight')
+        plt.clf()
     try:
         peak,realwidth,width=GDA.find_FWHM(gamma_arr,Ngamma_arr)
         gammae = peak

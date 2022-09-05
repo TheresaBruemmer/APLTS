@@ -210,11 +210,20 @@ def Optimise(sigmamin,sigmamax,taumin,taumax,llambda,Ep,a0,gamma_e,Q,eps_n,sigma
             w0_arr = Laser.w0_calc(llambda,Ep,a0,tau_arr)
             print("tau array:"+str(taumin)+" to "+str(taumax))
             result = Parallel(n_jobs = num_cores)(delayed(Photons_cone)(llambda,Ep,tau_arr[i],w0_arr[i],gamma_e,Q,sigma_arr_theo,eps_n/gamma_e/sigma_arr_theo,sigma_el,eps_n,theta_c,BWlim) for i,t in enumerate(tau_arr))
-            #print(type(result))
-            #print(type(result[0]))
+            #try:
+            #    np.savez("/p/home/jusers/bruemmer1/juwels/my_scratch/simdata/ICS/opt/pyics_laser_w0factor_90keVin1perc/result_"+str(opt_run)+".npz",result=result)
+            #except:
+            #    print("")
+            #print(type(result)) #list
+            #print(type(result[0])) #tuple
+            #try:
+            #    print(type(result[1])) #tuple
+            #except:
+            #    print("")
+            #print(type(np.array(result)[:,0])) #array
             #print(result[0])
             #print(np.array(result))
-            N_theo = np.array(result)[:,0]
+            N_theo = np.array(result, dtype=object)[:,0]
             for i,t in enumerate(tau_arr):
                 for j in range(0,len(N_theo[i])):
                     if np.isnan(N_theo[i][j])==True:

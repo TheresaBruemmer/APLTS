@@ -36,8 +36,8 @@ def generatorEkin_gammarange(gammamin,gammamax):
 def generatorEkin(gammae,enspread):
     #input for generator file. returns Ekin and sig_Ekin for uniform energy dist. for a given energy FWHM spread around gamma
     E_kin=Ekin(gammae)
-    gammamin = gammae*(1-2*enspread)
-    gammamax = gammae*(1+2*enspread)
+    gammamin = gammae*(1-0.5*enspread)
+    gammamax = gammae*(1+0.5*enspread)
     deltagamma=gammamax-gammamin
     sig_Ekin=(Ekin(gammamax)-E_kin)/np.sqrt(3)
     return E_kin,sig_Ekin, deltagamma

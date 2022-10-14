@@ -41,6 +41,7 @@ def generatorEkin(gammae,enspread):
     sig_Ekin=(Ekin(gamma_max)-E_kin)/np.sqrt(3)
     return E_kin,sig_Ekin, gamma_min,gamma_max
 
+
 def L_H(llambda, alpha, gamma, num):
     #Astra laser namelist time step setting in ns
     L=llambda/(num*(1-(1-1/gamma**2)**(0.5)*math.cos(alpha))*((1-1/gamma**2))**(0.5)*3e8)*1e9

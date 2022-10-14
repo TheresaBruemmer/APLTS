@@ -18,7 +18,7 @@ def find_FWHM(x_arr,data_arr,save_plot=None,out=False):
     """
     if save_plot is not None:
         plt.plot(x_arr,data_arr,'.')
-        plt.savefig(save_plot)
+        plt.savefig(save_plot,bbox_inches='tight')
         plt.clf()
     Imax=np.nanmax(data_arr)
     #at energy index                                                                       

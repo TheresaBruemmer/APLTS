@@ -3,7 +3,7 @@
 Active-Plasma Lens + Thomson Scattering (APLTS)
 ----------------------------------------
 This module contains the functions for Thomson Scattering of a Gaussian laser with an APL-focused, thus chromatically focused, electron bunch 
-Reference: Brümmer et al. "Compact all-optical tunable narrowband Compton hard X-ray source", to be published
+Reference: Brümmer et al. "Compact all-optical precision-tunable narrowband hard Compton X-ray source" Scientific Reports
 """
 #import sys
 #sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")

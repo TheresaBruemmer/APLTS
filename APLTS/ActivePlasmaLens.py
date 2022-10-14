@@ -31,15 +31,23 @@ def M_thinlens(r_0,I_0,gamma,L):
 def Twiss(epsilon_n,gammae,sigmar):
     """
     Returns Courant-Snyder (Twiss) parameters of an electron bunch in its focus
-    input: 
-    epsilon_n: normalised bunch emittance (m rad), float
-    gammae: electron bunch central energy (dimensionless), float
-    sigmar: electron bunch waist (m),float
+    
+    input:
+    ------
+    epsilon_n: 
+         normalised bunch emittance (m rad), float
+    gammae: 
+         electron bunch central energy (dimensionless), float
+    sigmar: 
+         electron bunch waist (m),float
+    
     output:
-    alpha, beta, gamma: Counrant-Snyder parameters, array of floats
+    -------
+    alpha, beta, gamma: 
+         Counrant-Snyder parameters, array of floats
     """
     epsilon=epsilon_n/gammae
-    alpha=0  # is zero in focus
+    alpha=np.zeros_like(gammae)  # is zero in focus
     beta=sigmar**2/epsilon
     gammaT=(1+alpha**2)/beta
     return np.array([beta,alpha,gammaT])
@@ -47,11 +55,18 @@ def Twiss(epsilon_n,gammae,sigmar):
 def propagateTwiss(Twiss_arr,Matrix):
     """
     Propagates Courant-Snyder parameters with given propagation matrix
+
     input: 
-    Twiss_arr: beta, alpha, gamma: Courant-Snyder parameters, array of floats
-    Matrix: Propagation matrix, e.g. M_freedrift, M_thinlens, ...
+    ------
+    Twiss_arr: 
+         beta, alpha, gamma: Courant-Snyder parameters, array of floats
+    Matrix: 
+         Propagation matrix, e.g. M_freedrift, M_thinlens, ...
+    
     output:
-    beta2,alpha2,gamma2: Courant-Snyder parameters, array of floats
+    -------
+    beta2,alpha2,gamma2: 
+         Courant-Snyder parameters, array of floats
     """
     beta1=Twiss_arr[0]
     alpha1=Twiss_arr[1]
@@ -68,38 +83,60 @@ def gammae_foc(f_0,I_0,L,r_0,z_0):
     '''
     This function is an approximation for the focused gammae at given lens parameters. 
     The approximated formula was calculated via Mathematica
+    
     input:
-    f_0: focal length (m), float
-    I_0: APL current (A), float
-    L: APL length (m), float
-    r_0: APL radius (m), float
-    z_0: distance between plasma acceleration stage and APL (m), float
-    output: 
-    focused_gammae: electron energy focused for given input parameters (dimensionless)
+    ------
+    f_0: 
+         focal length (m), float
+    I_0: 
+         APL current (A), float
+    L: 
+         APL length (m), float
+    r_0: 
+         APL radius (m), float
+    z_0: 
+         distance between plasma acceleration stage and APL (m), float
+    
+    output:
+    -------
+    focused_gammae: 
+         electron energy focused for given input parameters (dimensionless)
     '''
     k_0=e/(m_0*c)*mu_0/(2.*pi)
     focused_gammae = (k_0*I_0*L)/(12*r_0**2*(f_0+L+z_0))*(L**2+3*L*z_0+3*f_0*(L+2*z_0)+sqrt(L**2*(L+3*z_0)**2+6*f_0*L*(L**2+L*z_0+2*z_0**2)+3*f_0**2*(3*L**2+4*L*z_0+12*z_0**2)))
     return focused_gammae
-def FindAPLConfig(gammae,sigmar_i,eps_n,sigmar_f,L_APL,r_APL,z_0,I0_min,I0_max,Nrun):
+def FindAPLConfig_fixed_focalwaist(gammae,sigmar_i,eps_n,sigmar_f,L_APL,r_APL,z_0,I0_min,I0_max,Nrun):
     '''
     returns the APL config for a given target electron energy focus and APL setup
     #
     We want to do Nrun runs to find the optimum.
     Each time we close in more on the opt values
     #
-    Input:
-    gammae: Target electron energy
-    sigmar_i
-    eps_n
-    sigmar_f: target focal waist
-    L_APL,r_APL,z_0: lenth, radius and z position of APL
-    I0_min,I0_max: Range of initial APL current array
-    Nrun: number of opt loops
-    #
-    Output:
-    I_0: APL current for target focus
-    z_F: resulting focal plane
-    check_Waist: calculates the waist from optI0 and at zF, and should be compared to target sigmar_f from input
+    input:
+    -----
+    gammae: 
+         Target electron energy
+    sigmar_i:
+
+    eps_n:
+
+    sigmar_f: 
+         target focal waist
+    L_APL,r_APL,z_0: 
+         lenth, radius and z position of APL
+    I0_min,I0_max: 
+         Range of initial APL current array
+    Nrun: 
+         number of opt loops
+    
+    output:
+    -------
+    I_0: 
+         APL current for target focus
+    z_F: 
+         resulting focal plane
+    check_Waist: 
+         calculates the waist from optI0 and at zF, and should be compared to target sigmar_f from input
     '''
     for opt_run in range(0,Nrun+1):
         I0_arr = np.linspace(I0_min,I0_max,10)
@@ -113,10 +150,54 @@ def FindAPLConfig(gammae,sigmar_i,eps_n,sigmar_f,L_APL,r_APL,z_0,I0_min,I0_max,N
         I0_max=I0+2*delta_I0
     return I0,zF,check_Waist
 
-############################################################################
+def FindAPLConfig_fixed_focalplane(gammae,sigmar_i,eps_n,zF,L_APL,r_APL,z_0,I0_min,I0_max,Nrun):
+    '''
+    returns the APL config for a given target electron energy focal plane and APL setup
+    #
+    We want to do Nrun runs to find the optimum.
+    Each time we close in more on the opt values
+    #
+    input:
+    ------
+    gammae: 
+         Target electron energy
+    sigmar_i
 
-#class APL:
-#Lens Matrices
+    eps_n
+
+    zF: 
+         target focal plane
+    L_APL,r_APL,z_0: 
+         lenth, radius and z position of APL
+    I0_min,I0_max: 
+         Range of initial APL current array
+    Nrun: 
+         number of opt loops
+    #
+    output:
+    -------
+    I_0: 
+         APL current for target focus
+    z_F: 
+         resulting focal plane
+    check_Focus: 
+         calculates the focus from optI0, and should be compared to target focus from input
+    '''
+    for opt_run in range(0,Nrun+1):
+        I0_arr = np.linspace(I0_min,I0_max,10)
+        delta_I0=I0_arr[1]-I0_arr[0]
+        instances=APL_setup(L=L_APL,I_0=I0_arr,z_0=z_0,r_0=r_APL,gammae=gammae,eps_n=eps_n,sigmar_i=sigmar_i)
+        match_arg = np.nanargmin(abs(instances.focalPlane()-zF))
+        I0=I0_arr[match_arg]
+        sigmar_f=instances.focalWaist()[match_arg]
+        check_Focus=instances.focalPlane()[match_arg]
+        I0_min=I0-2*delta_I0
+        I0_max=I0+2*delta_I0
+    return I0,sigmar_f,check_Focus
+
+
+
+############################################################################
 
 class APL_setup():
     '''

@@ -3,7 +3,7 @@
 Active-Plasma Lens + Thomson Scattering (APLTS)
 ----------------------------------------
 This module contains the functions for Thomson Scattering of a Gaussian laser with an APL-focused, thus chromatically focused, electron bunch 
-Reference: Brümmer et al. "Compact all-optical tunable narrowband Compton hard X-ray source", to be published
+Reference: Brümmer et al. "Compact all-optical precision-tunable narrowband hard Compton X-ray source" Scientific Reports
 """
 #import sys
 #sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
@@ -11,7 +11,7 @@ Reference: Brümmer et al. "Compact all-optical tunable narrowband Compton hard 
 
 import numpy as np
 from numpy import sqrt
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 #from matplotlib.colors import LogNorm
 #import scipy
 #from scipy import special
@@ -69,7 +69,7 @@ def N_collimated_gammae_var(APL_instance,TS_instance,collimation_angle,gammae):
     N_cone = float(TS_instance.Photons_cone(collimation_angle))
     return TS_instance.bunch._sigma_r,TS_instance.bunch._sigma_div,N_cone
 
-def effective_energyspread_fromdata(gammas,Ngammas):
+def effective_energyspread_fromdata(gammas,Ngammas,save_plot=None):
     """
     returns effective energy spread from single-trace data
     fits Lorentzian function to data
@@ -84,15 +84,33 @@ def effective_energyspread_fromdata(gammas,Ngammas):
     popt: fit parameters of the Lorentzian fit to the data
     """
     target_gammae = GDA.weighted_avg_and_std(gammas,Ngammas,True)
-    popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,1])
     gamma_arr = np.linspace(np.nanmin(gammas),np.nanmax(gammas),1000)
-    Ngamma_arr = Lorentzian(gamma_arr,*popt)
-    peak,realwidth,width=GDA.find_FWHM(gamma_arr,Ngamma_arr,False,False)
-    effective_energy_spread_FWHM = 2*abs(popt[1])/popt[0]
-    gammae = peak
-    if abs(gammae-target_gammae)/target_gammae>0.05:
-        print("fit peak ("+str("%.2f" %gammae)+") differs from weighted mean ("+str("%.2f" %target_gammae)+")")
-    return effective_energy_spread_FWHM,gammae,popt
+    Ngamma_arr = np.zeros_like(gamma_arr)
+    try:
+        popt,pcov=curve_fit(Lorentzian,gammas,Ngammas,p0=[target_gammae,1,np.nanmax(Ngammas)])
+        Ngamma_arr = Lorentzian(gamma_arr,*popt)
+        effective_energy_spread_FWHM = 2*abs(popt[1])/popt[0]
+    except:
+        print("Lorentzian fit not possible, try find_FWHM")
+        effective_energy_spread_FWHM = np.NAN
+        popt = np.NAN
+    if save_plot is not None:
+        plt.plot(gammas,Ngammas,".")
+        plt.plot(gamma_arr,Ngamma_arr)
+        plt.xlabel("gamma")
+        plt.ylabel("Ngamma")
+        plt.savefig(save_plot,bbox_inches='tight')
+        plt.clf()
+    try:
+        peak,realwidth,width=GDA.find_FWHM(gamma_arr,Ngamma_arr)
+        gammae = peak
+        if effective_energy_spread_FWHM==np.NAN:
+            effective_energy_spread_FWHM=width
+        if abs(gammae-target_gammae)/target_gammae>0.05:
+            print("fit peak ("+str("%.2f" %gammae)+") differs from weighted mean ("+str("%.2f" %target_gammae)+")")
+    except:
+        print("could not determine FWHM")
+    return effective_energy_spread_FWHM,gamma_arr,popt
 def N_eff_simple(sigma_e,w0):
     """
     returns photon production factor given solely by the waist relation in the Thomson interaction of a bunch with a Gaussian laser
@@ -112,34 +130,35 @@ def N_eff(sigma_e,w0,a0,amp):
     ------------
     input parameters:
     sigma_e: RMS bunch waist (m), float
-    w0: Gaussian laser waist (m), float
-    a0: Gaussian laser norm. amplitude, i.e. laser-strength parameter (dimensionless)
-    amp: scaling amplitude (dimensionless), required for fit
+    w0:      Gaussian laser waist (m), float
+    a0:      Gaussian laser norm. amplitude, i.e. laser-strength parameter (dimensionless)
+    amp:     scaling amplitude (dimensionless), required for fit
     output:
-    N_eff: effective photon yield, float
+    N_eff:   effective photon yield, float
     """
     return N_eff_simple(sigma_e,w0)*a0**2*amp
-def effective_energyspread(zF,Laser_instance,APL_instance):
+def effective_energyspread(zF,Laser_instance,APL_instance,dgammae=0.4):
     """
     returns effective energy spread for a fixed electron energy gammae and focal plane zF
     requires instance of Laser and Active Plasma Lens classes
     performs Lorentzian fit, since Neff is assumed to follow a Lorentzian distribution
     ------------------
     input parameters:
-    zF: focal plane (m), i.e. distance from acceleration stage to focus z0+L+f
-    APL_instance: plasma lens parameters and gammae are fixed, current is array
+    zF:             focal plane (m), i.e. distance from acceleration stage to focus z0+L+f
+    APL_instance:   plasma lens parameters and gammae are fixed, current is array
     Laser_instance: instance of Gaussian Laser class
+    dgammae:         relative gamma width for ees calculation, float
     output: 
     effective_energy_spread_FWHM: effective  energy spread (FWHM)
-    I0_zF: plasma lens current to focus target gamma at target focal plane zF
-    popt: Lorentzian fit parameters
+    I0_zF:          plasma lens current to focus target gamma at target focal plane zF
+    popt:           Lorentzian fit parameters
     """
     gammae = APL_instance.gammae
     #Find lens current which focuses the given gammae at the given zF 
     I0_arr = APL_instance.I_0
     f=zF-APL_instance.L-APL_instance.z_0
     I0_zF=I0_arr[GDA._nanargmin(abs(APL_instance.focalLength()-(f)))]
-    gammae_instance_arr=gammae*np.linspace(0.8,1.2,1000)
+    gammae_instance_arr=gammae*np.linspace(1.0-dgammae/2,1+dgammae/2,1000)
     APL_instance_zF = APL_instance
     APL_instance_zF.gammae=gammae_instance_arr
     APL_instance_zF.I_0=I0_zF
@@ -148,14 +167,14 @@ def effective_energyspread(zF,Laser_instance,APL_instance):
     sigma_at_target_foc_new_instance=sqrt(beta_at_target_foc_new_instance*APL_instance_zF.eps_n/gammae)
     Neff= N_eff(sigma_at_target_foc_new_instance,Laser_instance._w0,Laser_instance._a0,1)
     #guess
-    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,False,False)
+    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,None,False)
     #fit
     popt,pcov = curve_fit(Lorentzian,gammae_instance_arr,Neff,p0=[peak,width,np.nanmax(Neff)])
     effective_energy_spread_FWHM = abs(2*popt[1]/popt[0]) # attention: not %
     return effective_energy_spread_FWHM,I0_zF,popt
-def effective_energyspread_fixedsetup(Laser_instance,APL_instance):
+def effective_energyspread_fixedsetup(Laser_instance,APL_instance,dgammae=0.4):
     """
-    Analogous to function effective_energyspread, but for APL_instance with fixe plasma current:
+    Analogous to function effective_energyspread, but for APL_instance with fixed plasma current:
     Effective energy spread for a fixed electron energy gammae and focal plane zF
     requires instance of Laser and Active Plasma Lens classes
     performs Lorentzian fit, since Neff is assumed to follow a Lorentzian distribution
@@ -163,6 +182,7 @@ def effective_energyspread_fixedsetup(Laser_instance,APL_instance):
     input:
     Laser_instance: Instance of Gaussian laser class
     APL_instance: plasma lens parameters including current and gammae are fixed
+    dgammae:         relative gamma width for ees calculation, float
     output:
     effective_energy_spread_FWHM: effective  energy spread (FWHM)
     popt: Lorentzian fit parameters
@@ -170,7 +190,7 @@ def effective_energyspread_fixedsetup(Laser_instance,APL_instance):
     gammae = APL_instance.gammae    
     f=APL_instance.focalLength()
     I0_zF=APL_instance.I_0
-    gammae_instance_arr=gammae*np.linspace(0.8,1.2,1000)
+    gammae_instance_arr=gammae*np.linspace(1.0-dgammae/2,1.0+dgammae/2,1000)
     APL_instance_zF = APL_instance
     APL_instance_zF.gammae=gammae_instance_arr
     Twiss_APL_zF=APL_instance_zF.propagate()[:][3]
@@ -178,7 +198,7 @@ def effective_energyspread_fixedsetup(Laser_instance,APL_instance):
     sigma_at_target_foc_new_instance=sqrt(beta_at_target_foc_new_instance*APL_instance_zF.eps_n/gammae)
     Neff= N_eff(sigma_at_target_foc_new_instance,Laser_instance._w0,Laser_instance._a0,1)
     #guess
-    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,False,False)
+    peak,realwidth,width=GDA.find_FWHM(gammae_instance_arr,Neff,None,False)
     #fit
     popt,pcov = curve_fit(Lorentzian,gammae_instance_arr,Neff,p0=[peak,width,np.nanmax(Neff)])
     effective_energy_spread_FWHM = abs(2*popt[1]/popt[0])

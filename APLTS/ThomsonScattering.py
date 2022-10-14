@@ -50,7 +50,7 @@ class ThomsonScattering():
         N=TST.Photons_tot(self.laser._wavelength,self.laser._Ep,self.laser._tau_FWHM,self.laser._w0,self.bunch._gammae,self.bunch._Q,self.bunch._sigma_r,self.bunch._sigma_l,self.bunch._emittance)
         return N
 
-    def Photons_cone(self,collimation_angle,coll_angle_steps=50):
+    def Photons_cone(self,collimation_angle,BWlim=0,coll_angle_steps=50):
         """
         Required parameters:
         #laser
@@ -71,7 +71,7 @@ class ThomsonScattering():
         """
         theta=collimation_angle
         thetasteps=coll_angle_steps
-        N_cone=TST.Photons_cone(self.laser._wavelength,self.laser._Ep,self.laser._tau_FWHM,self.laser._w0,self.bunch._gammae,self.bunch._Q,self.bunch._sigma_r,self.bunch._sigma_div,self.bunch._sigma_l,self.bunch._emittance,theta,thetasteps)[0]
+        N_cone=TST.Photons_cone(self.laser._wavelength,self.laser._Ep,self.laser._tau_FWHM,self.laser._w0,self.bunch._gammae,self.bunch._Q,self.bunch._sigma_r,self.bunch._sigma_div,self.bunch._sigma_l,self.bunch._emittance,theta,BWlim=BWlim,angle_steps=thetasteps)[0]
         return N_cone
     def Bandwidth_collimation(self,collimation_angle):
         return TST.BW_collimation(self.bunch._gammae,collimation_angle)

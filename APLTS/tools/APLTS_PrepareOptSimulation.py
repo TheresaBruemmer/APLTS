@@ -34,7 +34,7 @@ simulate sig_Ekin = 0.09746637968754784 eV
 
 """
 import sys
-sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
+sys.path.append("/home/bruemt/code/APLTS/")
 from APLTS.utilities.physical_constants import *
 import APLTS.utilities.Astra_tools
 import APLTS.ActivePlasmaLens as APL

@@ -5,7 +5,7 @@ APLTS is a tool to calculate Thomson Scattering (TS) from a Gaussian laser with 
 
 Author: Dr. Theresa Karoline Brümmer
 
-This is a collection of classes and modules for the following applications:
+This is a package for the following applications:
 
 Calculation:
 - TS:

@@ -29,18 +29,18 @@ def generatorEkin_gammarange(gammamin,gammamax):
     #input for generator file. returns Ekin and sig_Ekin for uniform energy dist. for a given gamma range
     gammamean=(gammamax+gammamin)/2
     E_kin=Ekin(gammamean)
-    signeg=(E_kin-Ekin(gammamin))/np.sqrt(3)
-    sigpos=(Ekin(gammamax)-E_kin)/np.sqrt(3)
-    return E_kin,signeg,sigpos,gammamean
+    sig_Ekin=(E_kin-Ekin(gammamin))/np.sqrt(3)
+    #sigpos=(Ekin(gammamax)-E_kin)/np.sqrt(3)
+    return E_kin,sig_Ekin,gammamean
 
 def generatorEkin(gammae,enspread):
     #input for generator file. returns Ekin and sig_Ekin for uniform energy dist. for a given energy FWHM spread around gamma
     E_kin=Ekin(gammae)
-    gammamin = gammae*(1-0.5*enspread)
-    gammamax = gammae*(1+0.5*enspread)
-    deltagamma=gammamax-gammamin
-    sig_Ekin=(Ekin(gammamax)-E_kin)/np.sqrt(3)
-    return E_kin,sig_Ekin, deltagamma
+    gamma_min = gammae*(1-0.5*enspread)
+    gamma_max = gammae*(1+0.5*enspread)
+    sig_Ekin=(Ekin(gamma_max)-E_kin)/np.sqrt(3)
+    return E_kin,sig_Ekin, gamma_min,gamma_max
+
 
 def L_H(llambda, alpha, gamma, num):
     #Astra laser namelist time step setting in ns
@@ -110,7 +110,24 @@ def plot_PhSp(path,filename):
     plt.savefig("xz_"+str(filename)+".pdf")
     plt.clf()
 
-
+def plot_spec(phasespace_filename = None):
+    """
+    plots the bunch spectrum from phase space file
+    """
+    if phasespace_filename:
+        x,y,z,px,py,pz,t=load_PhSp(phasespace_filename)
+        plt.hist(pz)
+        plt.xlabel("pz")
+        plt.savefig("pz_"+str(phasespace_filename)+".pdf")
+        plt.clf()
+        gamma_e = np.sqrt(px**2+py**2+pz**2)/(511e3)
+        plt.hist(gamma_e)
+        plt.xlabel('gamma_e')
+        plt.savefig('spec_'+str(phasespace_filename)+'.pdf')
+        plt.clf()
+    else:
+        print("No Phase Space given")
+        pass
 
         
 

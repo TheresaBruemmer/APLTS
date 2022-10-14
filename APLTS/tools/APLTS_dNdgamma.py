@@ -16,7 +16,7 @@ To do: Make this script an operation in APLTS.py e.g. Calc_dNdgammae or similar
 """
 #My modules
 import sys
-sys.path.append("/p/project/plasmabbq/tbruemmer/software/APLTS/")
+sys.path.append("/home/bruemt/code/APLTS/")
 from APLTS import Laser,ActivePlasmaLens,ThomsonScattering,APLTS
 import APLTS.utilities.physical_constants as constants
 from APLTS.utilities.GeneralDataAnalysis import _nanargmin #in GDA, mpl and plt are already loaded

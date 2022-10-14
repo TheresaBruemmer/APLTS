@@ -161,9 +161,9 @@ def FindAPLConfig_fixed_focalplane(gammae,sigmar_i,eps_n,zF,L_APL,r_APL,z_0,I0_m
     ------
     gammae: 
          Target electron energy
-    sigmar_i
+    sigmar_i:
 
-    eps_n
+    eps_n:
 
     zF: 
          target focal plane

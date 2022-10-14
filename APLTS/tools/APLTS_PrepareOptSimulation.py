@@ -36,7 +36,7 @@ simulate sig_Ekin = 0.09746637968754784 eV
 import sys
 sys.path.append("/home/bruemt/code/APLTS/")
 from APLTS.utilities.physical_constants import *
-import APLTS.utilities.Astra_tools
+from APLTS.utilities import Astra_tools
 import APLTS.ActivePlasmaLens as APL
 from APLTS import APLTS,Laser,ThomsonScattering
 from APLTS import ThomsonScatteringTools as TST

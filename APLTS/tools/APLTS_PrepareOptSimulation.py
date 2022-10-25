@@ -1,7 +1,7 @@
 """
 APL+Thomson Yield Optimiser within given BW and opening angle
 
-Prints out results. 
+Prints out results for optimum simulation with ASTRA for particle tracking
 
 Example printout:
 
